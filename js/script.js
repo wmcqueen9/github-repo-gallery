@@ -38,8 +38,9 @@ const getRepo=async function(){
 
 const displayRepo=function(repos){
   for( const repo of repos){
-    const ul=document.createElement("ul");
-    ul.innerHTML=`<h3>${repo.name}</h3>`;
-    repoList.append(ul);
+    const li=document.createElement("li");
+    li.classList.add("repo");
+    li.innerHTML=`<h3>${repo.name}</h3>`;
+    repoList.append(li);
   };
 };

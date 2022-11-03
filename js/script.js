@@ -30,14 +30,14 @@ div.innerHTML= `
     overview.append(div);
     getRepo();
 };
-
+//fetches the number of repos made 
 const getRepo=async function(){
   const fetchRepo=await fetch (`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`);
   const repoData=await fetchRepo.json();
   displayRepo(repoData);
   //console.log(repoData);
 };
-
+//shows a list of the repos
 const displayRepo=function(repos){
   for( const repo of repos){
     const li=document.createElement("li");
@@ -46,17 +46,20 @@ const displayRepo=function(repos){
     repoList.append(li);
   };
 };
+//added an listener when a repo is selected
 repoList.addEventListener("click",function(e){
 if(e.target.matches("h3")){
   const repoName=e.target.innerText;
   specificRepo(repoName);
 }
 });
+//fetches all the repos made so far
 const specificRepo=async function(repoName){
 const fetchSpecific  = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
 const repoInfo= await fetchSpecific.json();
 console.log(repoInfo);
 
+//fetches the languges used to create the repo
 const fetchLanguages= await fetch(repoInfo.languages_url);
 const languageData=await fetchLanguages.json();
 console.log(languageData);
@@ -69,7 +72,7 @@ for (let language in languageData){
 repoSpecificInfo(repoInfo,languages);
 };
 
-
+//shows the specific repo selected data
 const repoSpecificInfo=function(repoInfo, languages){
 repoData.innerHTML="";
 repoData.classList.remove("hide");

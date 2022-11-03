@@ -1,6 +1,8 @@
 const overview=document.querySelector(".overview");
 const username="wmcqueen9";
 const repoList=document.querySelector(".repo-list");
+const allRepos=document.querySelector(".repos");
+const repoData=document.querySelector(".repo-data");
 
 
 
@@ -43,4 +45,42 @@ const displayRepo=function(repos){
     li.innerHTML=`<h3>${repo.name}</h3>`;
     repoList.append(li);
   };
+};
+repoList.addEventListener("click",function(e){
+if(e.target.matches("h3")){
+  const repoName=e.target.innerText;
+  specificRepo(repoName);
+}
+});
+const specificRepo=async function(repoName){
+const fetchSpecific  = await fetch(`https://api.github.com/repos/${username}/${repoName}`);
+const repoInfo= await fetchSpecific.json();
+console.log(repoInfo);
+
+const fetchLanguages= await fetch(repoInfo.languages_url);
+const languageData=await fetchLanguages.json();
+console.log(languageData);
+const languages=[];
+
+for (let language in languageData){
+  languages.push(language);
+  console.log(language);
+}
+repoSpecificInfo(repoInfo,languages);
+};
+
+
+const repoSpecificInfo=function(repoInfo, languages){
+repoData.innerHTML="";
+repoData.classList.remove("hide");
+allRepos.classList.add("hide");
+const div= document.createElement("div");
+div.innerHTML=`
+<h3>Name: ${repoInfo.name}</h3>
+    <p>Description: ${repoInfo.description}</p>
+    <p>Default Branch: ${repoInfo.default_branch}</p>
+    <p>Languages: ${languages.join(", ")}</p>
+    <a class="visit" href="${repoInfo.html_url}" target="_blank" rel="noreferrer noopener">View Repo on GitHub!</a>`;
+    repoData.append (div);
+
 };
